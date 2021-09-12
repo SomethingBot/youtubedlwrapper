@@ -1,0 +1,42 @@
+kind: pipeline
+type: docker
+name: build
+
+trigger:
+  event:
+    - push
+    - tag
+    - pull_request
+
+steps:
+  - name: fmt
+    image: golang:1.16
+    commands:
+      - test -z $(go fmt ./...)
+  - name: build
+    image: golang:1.16
+    commands:
+      - go build .
+
+---
+kind: pipeline
+type: docker
+name: test
+
+trigger:
+  event:
+    - push
+    - tag
+
+depends_on:
+  - build
+
+steps:
+  - name: vet
+    image: golang:1.16
+    commands:
+      - go vet -v ./...
+  - name: test
+    image: golang:1.16
+    commands:
+      - go test -v ./...
