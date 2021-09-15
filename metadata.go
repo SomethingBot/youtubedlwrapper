@@ -66,7 +66,7 @@ type Thumbnail struct {
 	ID         string `json:"id"`
 }
 
-type Video struct {
+type VideoMetadata struct {
 	ID                 string            `json:"id"`
 	Title              string            `json:"title"`
 	Formats            []Format          `json:"formats"`
@@ -124,16 +124,16 @@ type Video struct {
 	Subtitles          map[string]string `json:"subtitles,omitempty"`
 }
 
-type Playlist struct {
-	Type               string  `json:"_type"`
-	Videos             []Video `json:"entries"`
-	ID                 string  `json:"id"`
-	Title              string  `json:"title"`
-	Uploader           string  `json:"uploader"`
-	UploaderID         string  `json:"uploader_id"`
-	UploaderURL        string  `json:"uploader_url"`
-	Extractor          string  `json:"extractor"`
-	WebpageURL         string  `json:"webpage_url"`
-	WebpageURLBasename string  `json:"webpage_url_basename"`
-	ExtractorKey       string  `json:"extractor_key"`
+type PlaylistMetadata struct {
+	Type               string          `json:"_type"`
+	Videos             []VideoMetadata `json:"entries"`
+	ID                 string          `json:"id"`
+	Title              string          `json:"title"`
+	Uploader           string          `json:"uploader"`
+	UploaderID         string          `json:"uploader_id"`
+	UploaderURL        string          `json:"uploader_url"`
+	Extractor          string          `json:"extractor"`
+	WebpageURL         string          `json:"webpage_url"`
+	WebpageURLBasename string          `json:"webpage_url_basename"`
+	ExtractorKey       string          `json:"extractor_key"`
 }
