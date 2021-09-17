@@ -10,11 +10,11 @@ trigger:
 
 steps:
   - name: fmt
-    image: golang:1.16
+    image: golang:1.17-bullseye
     commands:
       - test -z $(go fmt ./...)
   - name: build
-    image: golang:1.16
+    image: golang:1.17-bullseye
     commands:
       - go build .
 
@@ -33,10 +33,12 @@ depends_on:
 
 steps:
   - name: vet
-    image: golang:1.16
+    image: golang:1.17-bullseye
     commands:
       - go vet -v ./...
   - name: test
-    image: golang:1.16
+    image: golang:1.17-bullseye
     commands:
+      - apt update
+      - apt install youtube-dl
       - go test -v ./...
