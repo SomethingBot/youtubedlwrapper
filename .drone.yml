@@ -39,6 +39,6 @@ steps:
   - name: test
     image: golang:1.17-bullseye
     commands:
-      - apt update
-      - apt install youtube-dl
+      - apt-get update
+      - apt install youtube-dl -y
       - go test -v ./...
