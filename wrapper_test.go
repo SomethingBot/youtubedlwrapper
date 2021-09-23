@@ -11,9 +11,17 @@ func TestYoutubeDLWrapper_GetMetaData(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	_, err = youtubeDLWrapper.GetVideoMetadata("https://www.youtube.com/watch?v=rFejpH_tAHM")
+
+	_, err = youtubeDLWrapper.GetVideoMetadata("https://www.youtube.com/watch?v=lfW5CF0Nsis")
 	if err != nil {
 		t.Error(err)
 		return
 	}
+
+	_, err = youtubeDLWrapper.GetVideoMetadata("https://www.youtube.com/watch?v=lfW5CF0NsiBADURL")
+	if err != nil {
+		return
+	}
+
+	t.Error("Did not receive an error from bad url passed to youtube-dl")
 }

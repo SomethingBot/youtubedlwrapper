@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os/exec"
 )
 
@@ -43,12 +44,19 @@ func (youtubeDLWrapper *YoutubeDLWrapper) GetVideoMetadata(url string) (videoMet
 	var stderrBuffer bytes.Buffer
 	cmd.Stderr = &stderrBuffer
 
-	if err = cmd.Run(); err != nil {
-		return
-	}
+	switch err = cmd.Run(); err.(type) {
+	case *exec.ExitError:
+		youtubeDLError, err := io.ReadAll(&stderrBuffer)
+		if err != nil {
+			return videoMetadata, err
+		}
 
-	if youtubeDLError := stderrBuffer.String(); youtubeDLError != "" {
-		return videoMetadata, YoutubeDLError{error: youtubeDLError}
+		if youtubeDLErrorString := string(youtubeDLError); youtubeDLErrorString != "" {
+			return videoMetadata, YoutubeDLError{error: youtubeDLErrorString}
+		}
+		break
+	default:
+		return videoMetadata, err
 	}
 
 	youtubeDLOutput := stdoutBuffer.String()
