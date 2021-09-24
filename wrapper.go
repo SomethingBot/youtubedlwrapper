@@ -8,24 +8,6 @@ import (
 	"os/exec"
 )
 
-type WrapperOptions struct {
-	YoutubeDLBinary string
-}
-
-type YoutubeDLWrapper struct {
-	wrapperOptions WrapperOptions
-}
-
-func New(wrapperOptions WrapperOptions) (youtubeDLWrapper YoutubeDLWrapper, err error) {
-	if _, err = exec.LookPath(wrapperOptions.YoutubeDLBinary); err != nil {
-		return
-	}
-	youtubeDLWrapper.wrapperOptions = wrapperOptions
-	return youtubeDLWrapper, nil
-}
-
-var ErrNoYoutubeDLOutput = fmt.Errorf("youtubedlwrapper: youtube-dl returned no output")
-
 //YoutubeDLError is specifically an error returned on stderr by youtube-dl
 type YoutubeDLError struct {
 	error string
@@ -35,8 +17,27 @@ func (youtubeDLError YoutubeDLError) Error() string {
 	return youtubeDLError.error
 }
 
-func (youtubeDLWrapper *YoutubeDLWrapper) GetVideoMetadata(url string) (videoMetadata VideoMetadata, err error) {
-	cmd := exec.Command(youtubeDLWrapper.wrapperOptions.YoutubeDLBinary, "--dump-single-json", url)
+type WrapperOptions struct {
+	YoutubeDLBinary string
+	Exec            exec.Cmd
+}
+
+type Wrapper struct {
+	wrapperOptions WrapperOptions
+}
+
+func New(wrapperOptions WrapperOptions) (wrapper Wrapper, err error) {
+	if _, err = exec.LookPath(wrapperOptions.YoutubeDLBinary); err != nil {
+		return
+	}
+	wrapper.wrapperOptions = wrapperOptions
+	return wrapper, nil
+}
+
+var ErrNoYoutubeDLOutput = fmt.Errorf("youtubedlwrapper: youtube-dl returned no output")
+
+func (wrapper *Wrapper) GetVideoMetadata(url string) (videoMetadata VideoMetadata, err error) {
+	cmd := exec.Command(wrapper.wrapperOptions.YoutubeDLBinary, "--dump-single-json", url)
 
 	var stdoutBuffer bytes.Buffer
 	cmd.Stdout = &stdoutBuffer
