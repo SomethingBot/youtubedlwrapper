@@ -55,6 +55,8 @@ func (youtubeDLWrapper *YoutubeDLWrapper) GetVideoMetadata(url string) (videoMet
 			return videoMetadata, YoutubeDLError{error: youtubeDLErrorString}
 		}
 		break
+	case nil:
+		break
 	default:
 		return videoMetadata, err
 	}
