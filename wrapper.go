@@ -8,18 +8,9 @@ import (
 	"os/exec"
 )
 
-//YoutubeDLError is specifically an error returned on stderr by youtube-dl
-type YoutubeDLError struct {
-	error string
-}
-
-func (youtubeDLError YoutubeDLError) Error() string {
-	return youtubeDLError.error
-}
-
 type WrapperOptions struct {
 	YoutubeDLBinary string
-	Exec            exec.Cmd
+	execCmd         func(name string, arg ...string) *exec.Cmd
 }
 
 type Wrapper struct {
@@ -31,13 +22,12 @@ func New(wrapperOptions WrapperOptions) (wrapper Wrapper, err error) {
 		return
 	}
 	wrapper.wrapperOptions = wrapperOptions
+	wrapper.wrapperOptions.execCmd = execCmd
 	return wrapper, nil
 }
 
-var ErrNoYoutubeDLOutput = fmt.Errorf("youtubedlwrapper: youtube-dl returned no output")
-
 func (wrapper *Wrapper) GetVideoMetadata(url string) (videoMetadata VideoMetadata, err error) {
-	cmd := exec.Command(wrapper.wrapperOptions.YoutubeDLBinary, "--dump-single-json", url)
+	cmd := wrapper.wrapperOptions.execCmd(wrapper.wrapperOptions.YoutubeDLBinary, "--dump-single-json", url)
 
 	var stdoutBuffer bytes.Buffer
 	cmd.Stdout = &stdoutBuffer
