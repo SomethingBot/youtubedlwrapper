@@ -10,7 +10,7 @@ import (
 
 type WrapperOptions struct {
 	YoutubeDLBinary string
-	execCmd         func(name string, arg ...string) *exec.Cmd
+	cmd         func(name string, arg ...string) Cmd
 }
 
 type Wrapper struct {
@@ -22,18 +22,18 @@ func New(wrapperOptions WrapperOptions) (wrapper Wrapper, err error) {
 		return
 	}
 	wrapper.wrapperOptions = wrapperOptions
-	wrapper.wrapperOptions.execCmd = execCmd
+	wrapper.wrapperOptions.cmd = newStandardCmd
 	return wrapper, nil
 }
 
 func (wrapper *Wrapper) GetVideoMetadata(url string) (videoMetadata VideoMetadata, err error) {
-	cmd := wrapper.wrapperOptions.execCmd(wrapper.wrapperOptions.YoutubeDLBinary, "--dump-single-json", url)
+	cmd := wrapper.wrapperOptions.cmd(wrapper.wrapperOptions.YoutubeDLBinary, "--dump-single-json", url)
 
 	var stdoutBuffer bytes.Buffer
-	cmd.Stdout = &stdoutBuffer
+	cmd.SetStdout(&stdoutBuffer)
 
 	var stderrBuffer bytes.Buffer
-	cmd.Stderr = &stderrBuffer
+	cmd.SetStderr(&stderrBuffer)
 
 	switch err = cmd.Run(); err.(type) {
 	case *exec.ExitError:

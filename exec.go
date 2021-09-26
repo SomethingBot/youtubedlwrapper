@@ -1,7 +1,41 @@
 package youtubedlwrapper
 
-import "os/exec"
+import (
+	"io"
+	"os/exec"
+)
 
-func execCmd(name string, arg ...string) *exec.Cmd {
-	return exec.Command(name, arg...)
+type Cmd interface {
+	Start() error
+	Run() error
+	Wait() error
+	Output() ([]byte, error)
+	CombinedOutput() ([]byte, error)
+	StdinPipe() (io.WriteCloser, error)
+	StdoutPipe() (io.ReadCloser, error)
+	StderrPipe() (io.ReadCloser, error)
+	SetStdin(stdin io.Reader)
+	SetStdout(stdout io.Writer)
+	SetStderr(stderr io.Writer)
+	String() string
+}
+
+type standardCmd struct {
+	*exec.Cmd
+}
+
+func newStandardCmd(name string, arg ...string) Cmd {
+	return &standardCmd{exec.Command(name, arg...)}
+}
+
+func (standardCmd *standardCmd) SetStdin(stdin io.Reader) {
+	standardCmd.Stdin = stdin
+}
+
+func (standardCmd *standardCmd) SetStdout(stdout io.Writer) {
+	standardCmd.Stdout = stdout
+}
+
+func (standardCmd *standardCmd) SetStderr(stderr io.Writer) {
+	standardCmd.Stderr = stderr
 }
