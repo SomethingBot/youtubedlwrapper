@@ -10,7 +10,7 @@ import (
 
 type WrapperOptions struct {
 	YoutubeDLBinary string
-	cmd         func(name string, arg ...string) Cmd
+	cmd             func(name string, arg ...string) Cmd
 }
 
 type Wrapper struct {
