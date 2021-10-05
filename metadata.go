@@ -17,12 +17,12 @@ type Format struct {
 	Filesize          int               `json:"filesize"`
 	FormatID          string            `json:"format_id"`
 	FormatNote        string            `json:"format_note"`
-	Fps               interface{}       `json:"fps"`
-	Height            interface{}       `json:"height"`
+	Fps               int               `json:"fps"`
+	Height            int               `json:"height"`
 	Quality           int               `json:"quality"`
 	Tbr               float64           `json:"tbr"`
 	URL               string            `json:"url"`
-	Width             interface{}       `json:"width"`
+	Width             int               `json:"width"`
 	Ext               string            `json:"ext"`
 	Vcodec            string            `json:"vcodec"`
 	Acodec            string            `json:"acodec"`
@@ -36,7 +36,7 @@ type Format struct {
 }
 
 type RequestedFormat struct {
-	Asr               interface{}       `json:"asr"`
+	Asr               string            `json:"asr"`
 	Filesize          int               `json:"filesize"`
 	FormatID          string            `json:"format_id"`
 	FormatNote        string            `json:"format_note"`
@@ -85,7 +85,7 @@ type VideoMetadata struct {
 	WebpageURL         string                 `json:"webpage_url"`
 	Categories         []string               `json:"categories"`
 	Tags               []string               `json:"tags"`
-	IsLive             interface{}            `json:"is_live"`
+	IsLive             bool                   `json:"is_live"`
 	LikeCount          int                    `json:"like_count"`
 	DislikeCount       int                    `json:"dislike_count"`
 	Channel            string                 `json:"channel"`
@@ -106,17 +106,17 @@ type VideoMetadata struct {
 	PlaylistIndex      int                    `json:"playlist_index"`
 	Thumbnail          string                 `json:"thumbnail"`
 	DisplayID          string                 `json:"display_id"`
-	RequestedSubtitles interface{}            `json:"requested_subtitles"`
+	RequestedSubtitles string                 `json:"requested_subtitles"`
 	RequestedFormats   []RequestedFormat      `json:"requested_formats"`
 	Format             string                 `json:"format"`
 	FormatID           string                 `json:"format_id"`
 	Width              int                    `json:"width"`
 	Height             int                    `json:"height"`
-	Resolution         interface{}            `json:"resolution"`
+	Resolution         string                 `json:"resolution"`
 	Fps                int                    `json:"fps"`
 	Vcodec             string                 `json:"vcodec"`
 	Vbr                float64                `json:"vbr"`
-	StretchedRatio     interface{}            `json:"stretched_ratio"`
+	StretchedRatio     string                 `json:"stretched_ratio"`
 	Acodec             string                 `json:"acodec"`
 	Abr                float64                `json:"abr"`
 	Ext                string                 `json:"ext"`
