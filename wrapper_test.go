@@ -21,13 +21,10 @@ func TestYoutubeDLWrapper_GetMetaData(t *testing.T) {
 		stderrData: "",
 	}
 
-	//todo: dont use new, since it checks local filesystem for binary
-	youtubeDLWrapper, err := New(WrapperOptions{YoutubeDLBinary: "youtube-dl"})
-	if err != nil {
-		t.Error(err)
-		return
-	}
-	youtubeDLWrapper.wrapperOptions.cmd = cmdMocker.makeMockCommand
+	youtubeDLWrapper := Wrapper{wrapperOptions: WrapperOptions{
+		YoutubeDLBinary: "",
+		cmd:             cmdMocker.makeMockCommand,
+	}}
 
 	metadata, err := youtubeDLWrapper.GetVideoMetadata("https://www.youtube.com/watch?v=lfW5CF0Nsis")
 	if err != nil {
