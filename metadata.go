@@ -36,7 +36,7 @@ type Format struct {
 }
 
 type RequestedFormat struct {
-	Asr               string            `json:"asr"`
+	Asr               int               `json:"asr"`
 	Filesize          int               `json:"filesize"`
 	FormatID          string            `json:"format_id"`
 	FormatNote        string            `json:"format_note"`
