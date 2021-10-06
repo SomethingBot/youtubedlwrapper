@@ -5,7 +5,7 @@ import (
 	"os/exec"
 )
 
-type Cmd interface {
+type execCommand interface {
 	Start() error
 	Run() error
 	Wait() error
@@ -24,7 +24,7 @@ type standardCmd struct {
 	*exec.Cmd
 }
 
-func newStandardCmd(name string, arg ...string) Cmd {
+func newStandardCmd(name string, arg ...string) execCommand {
 	return &standardCmd{exec.Command(name, arg...)}
 }
 

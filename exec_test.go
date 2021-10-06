@@ -133,7 +133,7 @@ func TestYoutubeDLError_mockCommand_Run(t *testing.T) {
 			t.Errorf("test (%v), got error (%v) while reading stdoutBuffer\n", test.name, err)
 		}
 		if stdoutString := string(stdout); stdoutString != test.cmd.stdoutData {
-			t.Errorf("test (%v), cmd.stdout Reader returned stdout (%v), expected (%v)", test.name, stdoutString, test.cmd.stdoutData)
+			t.Errorf("test (%v), execCommand.stdout Reader returned stdout (%v), expected (%v)", test.name, stdoutString, test.cmd.stdoutData)
 		}
 
 		stderr, err := io.ReadAll(&stderrBuffer)
@@ -141,7 +141,7 @@ func TestYoutubeDLError_mockCommand_Run(t *testing.T) {
 			t.Errorf("test (%v), got error (%v) while reading stderrBuffer\n", test.name, err)
 		}
 		if stderrString := string(stderr); stderrString != test.cmd.stderrData {
-			t.Errorf("test (%v), cmd.stderr Reader returned stderr (%v), expected (%v)", test.name, stderrString, test.cmd.stderrData)
+			t.Errorf("test (%v), execCommand.stderr Reader returned stderr (%v), expected (%v)", test.name, stderrString, test.cmd.stderrData)
 		}
 	}
 }
@@ -155,7 +155,7 @@ type commandMocker struct {
 	runErr     error
 }
 
-func (commandMocker *commandMocker) makeMockCommand(name string, arg ...string) Cmd {
+func (commandMocker *commandMocker) makeMockCommand(name string, arg ...string) execCommand {
 	cmd := &mockCommand{
 		path:       name,
 		args:       arg,
