@@ -39,7 +39,7 @@ func main() {
 	url := flag.String("url", "", "URL of youtube video")
 	flag.Parse()
 	if *url == "" {
-		fmt.Printf("--url not set\n")
+		flag.PrintDefaults()
 		return
 	}
 	wrapper, err := youtubedlwrapper.New(youtubedlwrapper.WrapperOptions{YoutubeDLBinary: "youtube-dl"})
