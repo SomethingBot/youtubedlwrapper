@@ -12,26 +12,35 @@ type DownloaderOptions struct {
 	HTTPChunkSize int `json:"http_chunk_size"`
 }
 
+type Fragment struct {
+	Path     string  `json:"path"`
+	Duration float64 `json:"duration,omitempty"`
+}
+
 type Format struct {
-	Asr               int               `json:"asr"`
-	Filesize          int               `json:"filesize"`
 	FormatID          string            `json:"format_id"`
-	FormatNote        string            `json:"format_note"`
-	Fps               int               `json:"fps"`
-	Height            int               `json:"height"`
-	Quality           int               `json:"quality"`
-	Tbr               float64           `json:"tbr"`
-	URL               string            `json:"url"`
-	Width             int               `json:"width"`
+	ManifestURL       string            `json:"manifest_url,omitempty"`
 	Ext               string            `json:"ext"`
+	Width             int               `json:"width"`
+	Height            int               `json:"height"`
+	Tbr               float64           `json:"tbr"`
+	Asr               int               `json:"asr"`
+	Fps               int               `json:"fps"`
+	Language          string            `json:"language,omitempty"`
+	FormatNote        string            `json:"format_note"`
+	Filesize          int               `json:"filesize"`
+	Container         string            `json:"container,omitempty"`
 	Vcodec            string            `json:"vcodec"`
 	Acodec            string            `json:"acodec"`
+	URL               string            `json:"url"`
+	FragmentBaseURL   string            `json:"fragment_base_url,omitempty"`
+	Fragments         []Fragment        `json:"fragments,omitempty"`
+	Protocol          string            `json:"protocol"`
+	Format            string            `json:"format"`
+	HTTPHeaders       HTTPHeaders       `json:"http_headers"`
+	Quality           int               `json:"quality,omitempty"`
 	Abr               float64           `json:"abr,omitempty"`
 	DownloaderOptions DownloaderOptions `json:"downloader_options,omitempty"`
-	Container         string            `json:"container,omitempty"`
-	Format            string            `json:"format"`
-	Protocol          string            `json:"protocol"`
-	HTTPHeaders       HTTPHeaders       `json:"http_headers"`
 	Vbr               float64           `json:"vbr,omitempty"`
 }
 
