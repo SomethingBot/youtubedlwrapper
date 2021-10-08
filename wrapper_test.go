@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"strings"
 	"testing"
 )
 
@@ -42,7 +43,10 @@ func init() {
 			panic(fmt.Errorf("could not close file (%v), error (%v)\n", osFile.Name(), err))
 		}
 
-		err = json.Unmarshal(testVideo.data, &testVideo.videoMetadata)
+		decoder := json.NewDecoder(strings.NewReader(string(testVideo.data)))
+		decoder.DisallowUnknownFields()
+
+		err = decoder.Decode(&testVideo.videoMetadata)
 		if err != nil {
 			panic(fmt.Errorf("file (%v), could not unmarshal testVideo.data into testVideo.VideoMetadata, error (%v)\n", osFile.Name(), err))
 		}

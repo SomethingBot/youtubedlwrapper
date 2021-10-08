@@ -80,6 +80,12 @@ type AutomaticCaption struct {
 	URL string `json:"url"`
 }
 
+type Chapter struct {
+	StartTime int    `json:"start_time"`
+	EndTime   int    `json:"end_time"`
+	Title     string `json:"title"`
+}
+
 type VideoMetadata struct {
 	ID                 string                        `json:"id"`
 	Title              string                        `json:"title"`
@@ -134,6 +140,8 @@ type VideoMetadata struct {
 	Acodec             string                        `json:"acodec"`
 	Abr                float64                       `json:"abr"`
 	Ext                string                        `json:"ext"`
+	License            string                        `json:"license"`
+	Chapters           []Chapter                     `json:"chapters"`
 	AutomaticCaptions  map[string][]AutomaticCaption `json:"automatic_captions,omitempty"`
 	Subtitles          map[string]string             `json:"subtitles,omitempty"`
 }
