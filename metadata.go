@@ -44,29 +44,6 @@ type Format struct {
 	Vbr               float64           `json:"vbr,omitempty"`
 }
 
-type RequestedFormat struct {
-	Asr               int               `json:"asr"`
-	Filesize          int               `json:"filesize"`
-	FormatID          string            `json:"format_id"`
-	FormatNote        string            `json:"format_note"`
-	Fps               int               `json:"fps"`
-	Height            int               `json:"height"`
-	Quality           int               `json:"quality"`
-	Tbr               float64           `json:"tbr"`
-	URL               string            `json:"url"`
-	Width             int               `json:"width"`
-	Ext               string            `json:"ext"`
-	Vcodec            string            `json:"vcodec"`
-	Acodec            string            `json:"acodec"`
-	Vbr               float64           `json:"vbr,omitempty"`
-	DownloaderOptions DownloaderOptions `json:"downloader_options"`
-	Container         string            `json:"container"`
-	Format            string            `json:"format"`
-	Protocol          string            `json:"protocol"`
-	HTTPHeaders       HTTPHeaders       `json:"http_headers"`
-	Abr               float64           `json:"abr,omitempty"`
-}
-
 type Thumbnail struct {
 	Height     int    `json:"height"`
 	URL        string `json:"url"`
@@ -127,7 +104,7 @@ type VideoMetadata struct {
 	Thumbnail          string                        `json:"thumbnail"`
 	DisplayID          string                        `json:"display_id"`
 	RequestedSubtitles string                        `json:"requested_subtitles"`
-	RequestedFormats   []RequestedFormat             `json:"requested_formats"`
+	RequestedFormats   []Format                      `json:"requested_formats"`
 	Format             string                        `json:"format"`
 	FormatID           string                        `json:"format_id"`
 	Width              int                           `json:"width"`
