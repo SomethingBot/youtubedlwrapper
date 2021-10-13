@@ -92,7 +92,7 @@ func parseTestPlaylists(testDataDir string) error {
 
 		err = decoder.Decode(&testPlaylist.playlistMetadata)
 		if err != nil {
-			return fmt.Errorf("file (%v), could not unmarshal testVideo.data into testVideo.VideoMetadata, error (%v)\n", osFile.Name(), err)
+			return fmt.Errorf("file (%v), could not unmarshal testPlaylist.data into testPlaylist.PlaylistMetadata, error (%v)\n", osFile.Name(), err)
 		}
 
 		testPlaylists = append(testPlaylists, testPlaylist)
@@ -118,6 +118,19 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
+func TestNew(t *testing.T) {
+	t.Parallel()
+	_, err := New(WrapperOptions{YoutubeDLBinary: ""})
+	if err == nil {
+		t.Errorf("New() returned nil error, expected os.ErrNotFound\n, error (%v)", err)
+		return
+	}
+	_, err = New(WrapperOptions{YoutubeDLBinary: "go"})
+	if err != nil {
+		t.Errorf("New() returned error (%v), expected (nil)\n", err)
+	}
+}
+
 func TestYoutubeDLWrapper_GetMetaData(t *testing.T) {
 	t.Parallel()
 
@@ -140,6 +153,7 @@ func TestYoutubeDLWrapper_GetMetaData(t *testing.T) {
 
 	if metadata.ID == "" {
 		t.Error("Metadata doesnt exist after error isn't nil")
+		return
 	}
 
 	cmdMocker.runErr = &exec.ExitError{
@@ -155,11 +169,41 @@ func TestYoutubeDLWrapper_GetMetaData(t *testing.T) {
 	t.Error("Did not receive an error from bad url passed to youtube-dl")
 }
 
-//func TestWrapper_GetPlaylistMetadata(t *testing.T) {
-//	t.Parallel()
-//	cmdMocker := commandMocker{
-//		stdinData:  "",
-//		stdoutData: string(testVideos[0].data),
-//		stderrData: "",
-//	}
-//}
+func TestWrapper_GetPlaylistMetadata(t *testing.T) {
+	t.Parallel()
+	cmdMocker := commandMocker{
+		stdinData:  "",
+		stdoutData: string(testVideos[0].data),
+		stderrData: "",
+	}
+	youtubeDLWrapper := Wrapper{wrapperOptions: WrapperOptions{
+		YoutubeDLBinary: "",
+		cmd:             cmdMocker.makeMockCommand,
+	}}
+
+	for _, playlist := range testPlaylists {
+		metadata, err := youtubeDLWrapper.GetPlaylistMetadata("https://www.youtube.com/watch?v=" + playlist.playlistMetadata.Videos[0].ID + "&list=" + playlist.playlistMetadata.ID)
+		if err != nil {
+			t.Errorf("Failed to get playlist(%v) metadata, error (%v)\n", playlist.playlistMetadata.Videos[0].ID+"&list="+playlist.playlistMetadata.ID, err)
+			return
+		}
+		if metadata.ID == "" {
+			t.Error("Metadata doesnt exist after error isn't nil")
+			return
+		}
+	}
+
+	cmdMocker.runErr = &exec.ExitError{
+		ProcessState: nil,
+		Stderr:       []byte("status code 1"),
+	}
+	cmdMocker.stderrData = "status code 1"
+
+	for _, playlist := range testPlaylists {
+		_, err := youtubeDLWrapper.GetVideoMetadata("https://www.youtube.com/watch?v=" + playlist.playlistMetadata.Videos[0].ID + "BADURL?list=" + playlist.playlistMetadata.ID + "BADURL")
+		if err == cmdMocker.runErr {
+			t.Errorf("playlist (%v), expected error (%v), got error (%v)\n", playlist.playlistMetadata.ID, cmdMocker.runErr, err)
+			return
+		}
+	}
+}
